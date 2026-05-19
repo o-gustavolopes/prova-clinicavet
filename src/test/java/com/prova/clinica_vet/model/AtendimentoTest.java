@@ -1,11 +1,8 @@
 package com.prova.clinica_vet.model;
 
 import com.prova.clinica_vet.decorator.*;
-import com.prova.clinica_vet.model.Animal;
-import com.prova.clinica_vet.model.Atendimento;
-import com.prova.clinica_vet.model.ServicoVeterinario;
-import com.prova.clinica_vet.model.Tutor;
-import com.prova.clinica_vet.state.*;
+import com.prova.clinica_vet.state.SituacaoEstadoAgendado;
+import com.prova.clinica_vet.state.SituacaoEstadoEmAtendimento;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,8 +15,6 @@ import java.util.Observer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AtendimentoTest {
-
-    // ── Fixtures ──────────────────────────────────────────────────────────────
 
     private Atendimento atendimento;
     private Tutor tutor;
@@ -46,10 +41,6 @@ class AtendimentoTest {
         atendimento.setValorBase(servico.getValorBase());
         atendimento.setSituacaoEstado(SituacaoEstadoAgendado.getInstance());
     }
-
-    // ══════════════════════════════════════════════════════════════════════════
-    // STATE — mudancas de situacao
-    // ══════════════════════════════════════════════════════════════════════════
 
     @Nested
     @DisplayName("State: mudancas de situacao")
@@ -129,10 +120,6 @@ class AtendimentoTest {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // OBSERVER — notificacoes automaticas
-    // ══════════════════════════════════════════════════════════════════════════
-
     @Nested
     @DisplayName("Observer: notificacoes automaticas")
     class ObserverTests {
@@ -142,7 +129,6 @@ class AtendimentoTest {
         void tutorNotificadoAoIniciar() {
             List<String> mensagensRecebidas = new ArrayList<>();
 
-            // Observer de teste que captura as mensagens
             Observer capturador = (obs, arg) -> mensagensRecebidas.add((String) arg);
             atendimento.addObserver(capturador);
 
@@ -179,7 +165,6 @@ class AtendimentoTest {
                     (SituacaoEstadoEmAtendimento) atendimento.getSituacaoEstado();
             emAt.finalizar(atendimento);
 
-            // 2 eventos: inicio + finalizacao
             assertEquals(2, mensagens.size());
             assertTrue(mensagens.get(1).contains("Finalizado"));
         }
@@ -200,10 +185,6 @@ class AtendimentoTest {
             assertEquals(1, log2.size());
         }
     }
-
-    // ══════════════════════════════════════════════════════════════════════════
-    // DECORATOR — calculo de valor
-    // ══════════════════════════════════════════════════════════════════════════
 
     @Nested
     @DisplayName("Decorator: calculo de valor")
@@ -258,7 +239,6 @@ class AtendimentoTest {
         @Test
         @DisplayName("Combinacao: domiciliar + banho (sem desconto) = R$ 330,00")
         void combinacaoDomiciliarBanho() {
-            // 200 + 50 + 80 = 330
             CalculadorValor cv =
                     new BanhoPosConsulta(
                             new TaxaAtendimentoDomiciliar(base()));
