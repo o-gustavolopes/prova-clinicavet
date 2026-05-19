@@ -12,7 +12,15 @@ public class Tutor implements Observer {
     @Override
     public void update(Observable atendimento, Object arg) {
         String mensagem = (String) arg;
-
         System.out.println("Tutor " + nome + " recebeu notificacao: " + mensagem);
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+
+    public String getCpf() { return cpf; }
+    public void setCpf(String cpf) { this.cpf = cpf; }
 }
